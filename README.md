@@ -1,12 +1,34 @@
-# React + Vite
+# 🔐 Snippet Vault (In Progress)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Snippet Vault** is your personal, beautifully organized code snippet manager built with the **MERN Stack (MongoDB, Express, React, Node.js)**. Store, view, and copy your favorite code blocks anytime — syntax-safe, mobile-friendly.
 
-Currently, two official plugins are available:
+<img src="public/preview.png" height="360px" width="640px">
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 📁 Save code snippets with tags, categories, and descriptions
+- 💾 Secure backend with JWT auth (optional)
+- 📋 One-click copy to clipboard
+- 🔎 Search & filter by category or tag (WIP)
+- 🌓 Sleek dark-themed UI (built with Tailwind CSS)
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend**: React + Tailwind CSS
+- **Backend**: Node.js + Express.js
+- **Database**: MongoDB + Mongoose
+- **Auth**: JWT (optional)
+- **Icons**: Lucide React
+
+---
+
+## 🧪 Running Locally
+
+```bash
+npm install
+npm run both
+```
