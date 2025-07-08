@@ -2,7 +2,7 @@
 
 **Snippet Vault** is your personal, beautifully organized code snippet manager built with the **MERN Stack (MongoDB, Express, React, Node.js)**. Store, view, and copy your favorite code blocks anytime — syntax-safe, mobile-friendly.
 
-<img src="public/preview.png" height="360px" width="640px">
+<img src="public/snippetvault.png" height="360px" width="640px">
 
 ---
 
