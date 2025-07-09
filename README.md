@@ -21,7 +21,7 @@
 - **Frontend**: React + Tailwind CSS
 - **Backend**: Node.js + Express.js
 - **Database**: MongoDB + Mongoose
-- **Auth**: JWT (optional)
+- **Auth**: JWT, bcrypt
 - **Icons**: Lucide React
 
 ---
