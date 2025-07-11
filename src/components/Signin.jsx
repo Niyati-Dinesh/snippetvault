@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import {
-  Terminal,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  ArrowRight,
-} from "lucide-react";
+import { Terminal, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axiosInstance from "../api/axiosInstance";
+import { login } from "../store/authSlice";
 
 export default function Signin() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,15 +19,49 @@ export default function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const response = await axiosInstance.post("auth/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (response.status === 200) {
+        const { newUser, authToken } = response.data;
+        localStorage.setItem("token", authToken);
+        dispatch(
+          login({
+            user: newUser,
+            token: authToken,
+          })
+        );
+
+        toast.success("Logged into account successfully !")
+
+        setFormData({
+          email: "",
+          password: "",
+        });
+
+        navigate("/home");
+      } else {
+        toast.error("Something went wrong. Try again.", "error");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      toast.error(
+        `Signup failed. ${error.response?.data?.error || error.message}`,
+        "error"
+      );
+    }
+
     setIsLoading(false);
-    console.log('Signin:', formData);
   };
+  
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -46,7 +80,9 @@ export default function Signin() {
               Welcome Back
             </span>
           </h2>
-          <p className="text-gray-400 text-sm font-mono">Sign in to your SnippetVault</p>
+          <p className="text-gray-400 text-sm font-mono">
+            Sign in to your SnippetVault
+          </p>
         </div>
 
         {/* Form */}
@@ -69,7 +105,7 @@ export default function Signin() {
           <div className="relative">
             <Lock className="absolute left-3 top-3 w-5 h-5 text-fuchsia-400" />
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter your password"
               value={formData.password}

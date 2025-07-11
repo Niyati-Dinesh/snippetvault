@@ -6,6 +6,12 @@ const app = express();
 
 // Middleware to parse JSON
 app.use(express.json());
+const cors = require("cors");
+
+app.use(cors({
+  origin: "http://localhost:5173", 
+  credentials: true, // optional, needed if using cookies or auth headers
+}));
 
 // Define API routes
 app.use("/api/routes/auth", require("./routes/auth"));

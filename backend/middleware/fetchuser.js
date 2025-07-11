@@ -1,11 +1,11 @@
-//fetch user middleware
+//fetch user middleware to authenticate the user and fetch their id
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-require('dotenv').config({ path: '../.env' }); // if running from /backend
+require("dotenv").config({ path: __dirname + "/../../.env" });
+// if running from /backend
 const JWT_SECRET = process.env.JWT_SECRET;
 
-//why jwt here?
-//because we need to authenticate the user before fetching their data
+//jwt because we need to authenticate the user before fetching their data
 const fetchuser = async (req, res, next) => {
   //what we need to do here is to get the user from the token which is sent in the header which is the function of next.
   const token = req.header("authToken");

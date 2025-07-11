@@ -1,12 +1,16 @@
+//---------imports go here-------------------
+
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const Snippets = require("../models/snippets");
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
-require("dotenv").config({ path: "../.env" }); // if running from /backend
+require("dotenv").config({ path: __dirname + "/../../.env" });
 const JWT_SECRET = process.env.JWT_SECRET;
 const { body, validationResult } = require("express-validator");
+
+//---------Route definitions go here------------------------------
 
 //Route1: post - /api/routes/auth/signup Route to create a new user
 router.post(
@@ -31,32 +35,33 @@ router.post(
       let user = await User.findOne({ email });
       if (user) {
         console.log("User already exists");
-        return res
-          .status(400)
-          .json({
-            error: "User already exists with this email , please signin..",
-          });
+        return res.status(400).json({
+          error: "User already exists with this email , please signin..",
+        });
       }
       //New user creation
       //first hash the password
       const salt = await bcrypt.genSalt(10);
       const secPass = await bcrypt.hash(password, salt);
       //after hashing password , add user to database
-      const newUser = await User.create({
+      let newUser = await User.create({
         email,
         password: secPass,
       });
       await newUser.save();
       //create a token for the user
       const data = {
-        user: {
+        users: {
           id: newUser._id,
           //newUser is a mongoose object, so we can access the id directly
         },
       }; // user is a object with only id of the new user created
+      const userToSend = newUser.toObject();
+      delete userToSend.password;
+      newUser=userToSend
       const authToken = jwt.sign(data, JWT_SECRET);
       console.log("User created successfully");
-      res.status(200).json({ newUser });
+      res.status(200).json({ newUser, authToken });
     } catch (error) {
       console.error("Error in creating user:", error.message);
       res.status(500).send("Internal Server error");
@@ -105,13 +110,15 @@ router.post(
       console.log(data.users.id);
       const authToken = jwt.sign(data, JWT_SECRET);
       console.log("User logged in successfully");
-      res.status(200).json({ authToken });
+      const userToSend = user.toObject();
+      delete userToSend.password;
+      newUser=userToSend
+      res.status(200).json({ newUser , authToken });
     } catch (error) {
       console.error("Error in logging in user:", error.message);
       res.status(500).send("Internal Server error");
     }
   }
 );
-
 
 module.exports = router;

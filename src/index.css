@@ -1,16 +1,11 @@
 @import "tailwindcss";
-@plugin "daisyui"{
-  themes: light --default, dark --prefersdark, black , fantasy;
+/*@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');*/
+.custom-toast {
+  background: rgba(31, 6, 40, 0.85);
+  border-left: 5px solid #ec4899;
+  border-radius: 8px;
+  font-family: 'Fira Code', monospace;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
 }
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
-/*[data-theme="light"] {
-  .my-btn {
-    background-color: #1EA1F1;
-    border-color: #1EA1F1;
-  }
-  .my-btn:hover {
-    background-color: #1C96E1;
-    border-color: #1C96E1;
-  }
-}*/
-

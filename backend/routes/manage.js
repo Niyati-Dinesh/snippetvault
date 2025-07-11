@@ -12,9 +12,7 @@ console.log("manage.js loaded ✅");
 router.post(
   "/createsnippet",
   fetchUser,
-  [
-    body("title", "Title is required").exists()
-  ],
+  [body("title", "Title is required").exists()],
   async (req, res) => {
     // first validate body
     const errors = validationResult(req);
@@ -38,7 +36,7 @@ router.post(
       });
       // .create() saves the snippet automatically
       console.log("Snippet created successfully");
-      return res.status(201).json({ snippet });
+      return res.status(200).json({ snippet });
     } catch (error) {
       console.error("Error in creating snippet:", error.message);
       return res.status(500).send("Internal Server error");
@@ -121,9 +119,10 @@ router.get("/fetchsnippet", fetchUser, async (req, res) => {
     const snippets = await Snippets.find({ uid: req.user.id });
 
     if (snippets.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "Add some snippets + to view them" });
+      return res.status(200).json({
+        snippets: [],
+        message: "Add some snippets to view them",
+      });
     }
 
     console.log("Snippets fetched successfully");
