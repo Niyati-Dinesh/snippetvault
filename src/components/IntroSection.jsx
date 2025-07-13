@@ -1,3 +1,5 @@
+//-----------------------Intro Page Component-------------------------
+
 import { Code, Terminal, Zap, Search, Clock, Shield , MousePointerClick } from "lucide-react"
 
 export default function IntroSection() {

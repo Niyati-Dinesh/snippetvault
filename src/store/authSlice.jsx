@@ -1,3 +1,5 @@
+//Redux for storing user details
+
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isAuthenticated: false,

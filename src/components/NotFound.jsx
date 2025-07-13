@@ -1,10 +1,10 @@
-import React from "react";
+//--------------------Not Found Page-------------------------
 import { HeartCrack } from "lucide-react";
 export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center h-[80vh] text-white font-mono px-4 text-center">
       <img
-        src="/404.png"
+        src="../public/404.png"
         alt="Page Not Found"
         className="w-96 max-w-full mb-6 animate-pulse"
       />

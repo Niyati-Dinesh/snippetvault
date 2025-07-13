@@ -1,11 +1,14 @@
-"use client"
+//-----------------imports---------------------------
 
 import { useState, useEffect } from "react"
 import { X, Plus, Tag, Code2, FileText, Folder, Hash, Edit } from "lucide-react"
 import toast from "react-hot-toast"
-import axiosPost from "../api/axiosInstance"
+import axiosInstance from "../api/axiosInstance"
+
 
 export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSnippetUpdated, editingSnippet = null }) {
+
+//----------------declarations----------------------
   const [formData, setFormData] = useState({
     title: "",
     about: "",
@@ -15,24 +18,9 @@ export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSni
     followup: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const categories = [
-    "JavaScript",
-    "Python",
-    "React",
-    "Node.js",
-    "CSS",
-    "HTML",
-    "TypeScript",
-    "SQL",
-    "Git",
-    "Docker",
-    "API",
-    "Utils",
-    "Other",
-  ]
-
   const isEditMode = editingSnippet !== null
+
+//-----------------function declaration--------------
 
   // Populate form when editing
   useEffect(() => {
@@ -58,6 +46,8 @@ export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSni
     }
   }, [editingSnippet, isOpen])
 
+
+// function to handle changes in form
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -66,6 +56,7 @@ export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSni
     }))
   }
 
+  // function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -100,7 +91,7 @@ export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSni
 
       if (isEditMode) {
         // Update existing snippet
-        response = await axiosPost.put(`/manage/updatesnippet/${editingSnippet._id}`, payload)
+        response = await axiosInstance.put(`/manage/updatesnippet/${editingSnippet._id}`, payload)
         if (response.status === 200) {
           toast.success("Snippet updated successfully! ✨")
           onSnippetUpdated(response.data.snippet)
@@ -108,7 +99,7 @@ export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSni
         }
       } else {
         // Create new snippet
-        response = await axiosPost.post("/manage/createsnippet", payload)
+        response = await axiosInstance.post("/manage/createsnippet", payload)
         if (response.status === 200) {
           toast.success("Snippet created successfully! 🎉")
           onSnippetAdded(response.data.snippet)
@@ -123,6 +114,7 @@ export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSni
     }
   }
 
+//function to handle closing of model
   const handleClose = () => {
     setFormData({
       title: "",
@@ -134,8 +126,9 @@ export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSni
     })
     onClose()
   }
-
   if (!isOpen) return null
+
+//--------------------rendering--------------------------
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -249,6 +242,7 @@ export default function AddSnippetModal({ isOpen, onClose, onSnippetAdded, onSni
               placeholder="Enter your code snippet here..."
               rows={8}
               className="w-full px-4 py-3 bg-black/50 border border-fuchsia-500/30 rounded-lg text-white placeholder:text-gray-500 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent resize-none"
+              required
               
             />
           </div>

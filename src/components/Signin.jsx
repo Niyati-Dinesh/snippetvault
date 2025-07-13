@@ -1,12 +1,18 @@
+//--------------------imports go here--------------------------
+
 import React, { useState } from "react";
 import { Terminal, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import axiosInstance from "../api/axiosInstance";
 import { login } from "../store/authSlice";
+import { ShieldAlert } from "lucide-react";
+//-------------------------------------------------------------
 
 export default function Signin() {
+  //--------------------declarations go here-------------------
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -16,6 +22,9 @@ export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  //---------------function definitions-------------------------
+
+  //function to signin the user
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -28,6 +37,7 @@ export default function Signin() {
       if (response.status === 200) {
         const { newUser, authToken } = response.data;
         localStorage.setItem("token", authToken);
+        localStorage.setItem("user", newUser);
         dispatch(
           login({
             user: newUser,
@@ -35,29 +45,28 @@ export default function Signin() {
           })
         );
 
-        toast.success("Logged into account successfully !")
-
         setFormData({
           email: "",
           password: "",
         });
-
         navigate("/home");
       } else {
-        toast.error("Something went wrong. Try again.", "error");
+        toast.error("Something went wrong. Try again.", {
+          duration: 1000,
+        });
       }
     } catch (error) {
       console.error("Signup error:", error);
-      toast.error(
-        `Signup failed. ${error.response?.data?.error || error.message}`,
-        "error"
-      );
+      toast("Invalid Credentials", {
+        icon: <ShieldAlert className="text-red-800" />,
+        duration: 1000,
+      });
     }
 
     setIsLoading(false);
   };
-  
 
+  //function to handle changes in form
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -65,8 +74,12 @@ export default function Signin() {
     });
   };
 
+  //---------------------rendering--------------------------
   return (
     <div className="w-full max-w-md mx-auto px-4 py-16">
+      <div>
+        <Toaster position="top-center" reverseOrder={false} />
+      </div>
       <div className="relative p-8 rounded-2xl bg-gradient-to-br from-gray-900/50 to-black/50 border border-fuchsia-500/30 backdrop-blur-xl">
         {/* Header */}
         <div className="text-center mb-8">

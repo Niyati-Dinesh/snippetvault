@@ -1,3 +1,5 @@
+//Redux for storing snippets
+
 import { configureStore } from '@reduxjs/toolkit'
 import { authReducer } from './authSlice'
 import snippetReducer from './snippetSlice'

@@ -1,3 +1,5 @@
+//----------------------imports go here-----------------------
+
 import React, { useState } from "react";
 import {
   Terminal,
@@ -10,10 +12,14 @@ import {
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // custom styles
 import axiosInstance from "../api/axiosInstance";
+import { Toaster } from "react-hot-toast";
 export default function Signup() {
+
+//-------------------declarations---------------------------
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,17 +31,10 @@ export default function Signup() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  
+    
 
-  const notify = (msg, type = "default") => {
-    toast(msg, {
-      type,
-      className: "custom-toast",
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      pauseOnHover: false,
-    });
-  };
+//----------------------function definitions--------------------------
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -73,7 +72,6 @@ export default function Signup() {
           })
         );
 
-        notify("Account created successfully!", "success");
 
         setFormData({
           email: "",
@@ -83,22 +81,26 @@ export default function Signup() {
 
         navigate("/home");
       } else {
-        notify("Something went wrong. Try again.", "error");
+        toast.error("Something went wrong. Try again.",{
+          duration:1000
+        });
       }
     } catch (error) {
       console.error("Signup error:", error);
-      notify(
-        `Signup failed. ${error.response?.data?.error || error.message}`,
-        "error"
+      toast.error(
+        "Email already registered",{
+          duration:1000
+        }
       );
     }
 
     setIsLoading(false);
   };
 
+//---------------------------------rendering--------------------------------
   return (
     <div className="w-full max-w-md mx-auto px-4 py-16 relative">
-      <ToastContainer />
+      <Toaster/>
       <div className="relative p-8 rounded-2xl bg-gradient-to-br from-gray-900/50 to-black/50 border border-fuchsia-500/30 backdrop-blur-xl">
         {/* Header */}
         <div className="text-center mb-8">

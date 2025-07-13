@@ -1,3 +1,5 @@
+//-----------imports----------------------------
+
 const jwt = require("jsonwebtoken");
 const Snippets = require("../models/snippets");
 const express = require("express");
@@ -7,6 +9,8 @@ const { body, validationResult } = require("express-validator");
 const fetchUser = require("../middleware/fetchuser");
 const JWT_SECRET = process.env.JWT_SECRET;
 console.log("manage.js loaded ✅");
+
+//-------------Route-1---------------------------
 
 //Route1: post - /api/routes/manage/createsnippet Route to add a new snippet
 router.post(
@@ -35,7 +39,6 @@ router.post(
         followup,
       });
       // .create() saves the snippet automatically
-      console.log("Snippet created successfully");
       return res.status(200).json({ snippet });
     } catch (error) {
       console.error("Error in creating snippet:", error.message);
@@ -43,6 +46,8 @@ router.post(
     }
   }
 );
+
+//-------------------Route-2------------------------
 
 //Route2: post - /api/routes/manage/updatesnippet/:id Route to update an existing snippet
 router.put("/updatesnippet/:id", fetchUser, async (req, res) => {
@@ -78,7 +83,7 @@ router.put("/updatesnippet/:id", fetchUser, async (req, res) => {
     );
 
     if (updatedSnippet) {
-      console.log("Snippet updated successfully");
+      
       return res.status(200).json({ snippet: updatedSnippet });
     }
   } catch (error) {
@@ -86,6 +91,8 @@ router.put("/updatesnippet/:id", fetchUser, async (req, res) => {
     return res.status(500).send("Internal Server error");
   }
 });
+
+//---------------------Route-3---------------------
 
 //Route3: post - /api/routes/manage/deletesnippet/:id Route to delete a snippet
 router.delete("/deletesnippet/:id", fetchUser, async (req, res) => {
@@ -104,13 +111,15 @@ router.delete("/deletesnippet/:id", fetchUser, async (req, res) => {
     }
 
     await Snippets.findByIdAndDelete(snippetId);
-    console.log("Snippet deleted successfully");
+    
     return res.status(200).json({ message: "Snippet deleted successfully" });
   } catch (error) {
     console.error("Error in deleting snippet:", error.message);
     return res.status(500).send("Internal Server error");
   }
 });
+
+//------------------Route-4------------------------
 
 //Route4: get - /api/routes/manage/fetchsnippet Route to fetch all the snippets of the user
 router.get("/fetchsnippet", fetchUser, async (req, res) => {
@@ -125,12 +134,14 @@ router.get("/fetchsnippet", fetchUser, async (req, res) => {
       });
     }
 
-    console.log("Snippets fetched successfully");
+    
     return res.status(200).json({ snippets });
   } catch (error) {
     console.error("Error in fetching snippets:", error.message);
     return res.status(500).send("Internal Server error");
   }
 });
+
+//-------------------------------------------------------------
 
 module.exports = router;

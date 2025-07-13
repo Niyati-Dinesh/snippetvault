@@ -1,6 +1,8 @@
+//--------Mongoose Connection---------------
 const connect = require("./dbconnection");
-connect(); // Connect to MongoDB
+connect(); 
 
+//--------Express----------------------------
 const express = require("express");
 const app = express();
 
@@ -8,10 +10,13 @@ const app = express();
 app.use(express.json());
 const cors = require("cors");
 
+//--------Use frontend and backend concurrently-----------------
 app.use(cors({
   origin: "http://localhost:5173", 
   credentials: true, // optional, needed if using cookies or auth headers
 }));
+
+//-------------API Routes--------------------
 
 // Define API routes
 app.use("/api/routes/auth", require("./routes/auth"));
@@ -22,7 +27,8 @@ app.get("/", (req, res) => {
   res.send("SnippetVault is live! 🛡️✨");
 });
 
-// Start server
+//---------------Start server------------------
+
 app.listen(7777, () => {
   console.log("SnippetVault listening on http://localhost:7777");
 });

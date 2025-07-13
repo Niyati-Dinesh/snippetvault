@@ -1,5 +1,6 @@
 // App.jsx
 import { Heart } from "lucide-react";
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Signin from "./components/Signin";
@@ -9,16 +10,24 @@ import NotFound from "./components/NotFound";
 import Logout from "./components/Logout";
 import { useSelector, useDispatch } from "react-redux";
 import IntroSection from "./components/IntroSection";
-
+import { useNavigate } from "react-router-dom";
 
 export default function App() {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const dispatch = useDispatch();
-
+  const isToken = localStorage.getItem("token")?true:false 
+  const isAuthenticated= useSelector((state) => state.auth.isAuthenticated);
+  const navigate = useNavigate();
+useEffect(
+  ()=>{
+    if (isAuthenticated && !isToken){
+        navigate("/logout")
+    }
+  },[]
+)
   // Function to handle adding snippets (lifted to App level)
 
   return (
     <div className="flex flex-col min-h-screen bg-black relative">
+      
       <NavBar />
 
       {/* Modal rendered at App level - always available */}
@@ -33,8 +42,8 @@ export default function App() {
             path="/home"
             element={isAuthenticated ? <Cards /> : <IntroSection />}
           />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={isAuthenticated ? <Cards /> :<Signin />} />
+          <Route path="/signup" element={isAuthenticated ? <Cards /> :<Signup />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<NotFound />} />
           {/* Remove the AddSnippet route since it's now a modal */}

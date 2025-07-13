@@ -10,7 +10,7 @@ require("dotenv").config({ path: __dirname + "/../../.env" });
 const JWT_SECRET = process.env.JWT_SECRET;
 const { body, validationResult } = require("express-validator");
 
-//---------Route definitions go here------------------------------
+//---------Route-1------------------------------
 
 //Route1: post - /api/routes/auth/signup Route to create a new user
 router.post(
@@ -34,9 +34,8 @@ router.post(
       //check if user already exists
       let user = await User.findOne({ email });
       if (user) {
-        console.log("User already exists");
         return res.status(400).json({
-          error: "User already exists with this email , please signin..",
+          message: "User already exists with this email , please signin..",
         });
       }
       //New user creation
@@ -59,8 +58,7 @@ router.post(
       const userToSend = newUser.toObject();
       delete userToSend.password;
       newUser=userToSend
-      const authToken = jwt.sign(data, JWT_SECRET);
-      console.log("User created successfully");
+      const authToken = jwt.sign(data, JWT_SECRET, { expiresIn: '1h' });
       res.status(200).json({ newUser, authToken });
     } catch (error) {
       console.error("Error in creating user:", error.message);
@@ -68,6 +66,8 @@ router.post(
     }
   }
 );
+
+//------------------Route-2--------------------------------
 
 //Route2: post - /api/routes/auth/login Route to login a user
 router.post(
@@ -82,7 +82,6 @@ router.post(
     //first validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log(errors);
       return res.status(400).json({ error: errors.array()[0].msg });
     }
     try {
@@ -90,16 +89,14 @@ router.post(
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       if (!user) {
-        console.log("User does not exist, please signup first..");
         return res
           .status(400)
-          .json({ error: "User does not exist,please signup first.." });
+          .json({message: "Email not registered!"});
       }
       //check if password is correct
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
-        console.log("Incorrect password");
-        return res.status(400).json({ error: "Incorrect password" });
+        return res.status(400).json({ message: "Invalid Credentials" });
       }
       //create a token for the user
       const data = {
@@ -107,12 +104,12 @@ router.post(
           id: user._id,
         },
       };
-      console.log(data.users.id);
-      const authToken = jwt.sign(data, JWT_SECRET);
-      console.log("User logged in successfully");
+      
+      const authToken = jwt.sign(data, JWT_SECRET, { expiresIn: '1h' });
+      //console.log("User logged in successfully");
       const userToSend = user.toObject();
       delete userToSend.password;
-      newUser=userToSend
+      let newUser=userToSend
       res.status(200).json({ newUser , authToken });
     } catch (error) {
       console.error("Error in logging in user:", error.message);
